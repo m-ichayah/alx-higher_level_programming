@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# 2-read_lines.py
+# 2-append_write.py
 # Iniovosa Michayah O
 """
 a function that appendsat the end of a

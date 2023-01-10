@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# 1-number_of_lines.py
+# 1-write_file.py
 # Iniovosa Michayah O
 """
 a function that writes a string to a
