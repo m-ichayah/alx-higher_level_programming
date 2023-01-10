@@ -1,20 +1,11 @@
 #!/usr/bin/python3
 # 5-to_json_string.py
 # Iniovosa Michayah O
-
-"""
-a function that creates an Object from a “JSON file”
-"""
-
-
+"""Defines a JSON file-reading function."""
 import json
 
 
 def load_from_json_file(filename):
-    """
-    JSON representation creating an object
-    from JSON file
-    """
+    """Create a Python object from a JSON file."""
     with open(filename) as f:
-        obj_create = json.load(f)
-        return 
+        return json.load(f)
