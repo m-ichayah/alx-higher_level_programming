@@ -1,39 +1,63 @@
 #!/usr/bin/python3
-"""This documents gather stats from stdin"""
+"""module for use in log debugging
+"""
+
+
 import sys
 
 
-def print_pretty(size, code_dict):
-    """parse important data"""
-    print("File size: {}".format(size))
-    for key, value in sorted(code_dict.items()):
-        if (value != 0):
-            print("{}: {}".format(key, value))
+class DebugLog:
+    """class for use in debugging stdin logs
+    """
+    def __init__(self):
+        self.lines = []
+        self.total_size = 0
+        self.codes_200 = 0
+        self.codes_401 = 0
+        self.codes_403 = 0
+        self.codes_404 = 0
+        self.codes_405 = 0
+        self.codes_500 = 0
+        self.__current_line = 0
 
-if __name__ == '__main__':
-    """init code to print the parsed data"""
-    size = 0
-    code_dict = {
-        "200": 0,
-        "301": 0,
-        "400": 0,
-        "401": 0,
-        "403": 0,
-        "404": 0,
-        "405": 0,
-        "500": 0
-    }
-    try:
-        line_counter = 0
-        for line in sys.stdin:
-            line_counter += 1
-            code = line.split()[7]
-            size += int(line.split()[8])
-            if code in code_dict:
-                code_dict[code] += 1
-            if (line_counter % 10 == 0):
-                print_pretty(size, code_dict)
-        print_pretty(size, code_dict)
-    except KeyboardInterrupt:
-        print_pretty(size, code_dict)
-        raise
+    def __str__(self):
+        string = "File size: " + str(self.total_size) + '\n'
+        string += "200: " + str(self.codes_200) + '\n'
+        string += "401: " + str(self.codes_401) + '\n'
+        string += "403: " + str(self.codes_403) + '\n'
+        string += "404: " + str(self.codes_404) + '\n'
+        string += "405: " + str(self.codes_405) + '\n'
+        string += "500: " + str(self.codes_500)
+        return string
+
+    def update(self, iteration_n):
+        """updates current response numbers
+            with new set of lines
+        """
+        for i in range(self.__current_line, self.__current_line + iteration_n):
+            if "200" in self.lines[i]:
+                self.codes_200 += 1
+            elif "401" in self.lines[i]:
+                self.codes_401 += 1
+            elif "403" in self.lines[i]:
+                self.codes_403 += 1
+            elif "404" in self.lines[i]:
+                self.codes_404 += 1
+            elif "405" in self.lines[i]:
+                self.codes_405 += 1
+            elif "500" in self.lines[i]:
+                self.codes_500 += 1
+            words = line.split(' ')
+            self.total_size += int(words[-1])
+            self.__current_line += 1
+
+
+log = DebugLog()
+lines = []
+line = sys.stdin.readline()
+while line != "":
+    log.lines.append(line)
+    if len(log.lines) % 10 == 0:
+        log.update(10)
+        print(log)
+    line = sys.stdin.readline()
