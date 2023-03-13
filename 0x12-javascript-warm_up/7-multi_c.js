@@ -1,7 +1,6 @@
 #!/usr/bin/node
 
 const arg = process.argv[2];
-
 if (/^\d+$/.test(arg)) {
   const x = parseInt(arg);
 
