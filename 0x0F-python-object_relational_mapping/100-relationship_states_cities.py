@@ -1,35 +1,28 @@
 #!/usr/bin/python3
+"""Start link class to table in database
 """
-Creates the State “California” with the City “San Francisco”
-from the database hbtn_0e_100_usa.
-Usage: ./100-relationship_states_cities.py 
-<mysql username>
-<mysql password>
-<database name>
-"""
+from sys import argv
 from relationship_state import Base, State
 from relationship_city import City
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-import sys
+from sqlalchemy.orm import sessionmaker
 
 
-if __name__ == '__main__':
-    args = sys.argv
-    if len(args) != 4:
-        print("Usage: {} username password database_name".format(args[0]))
-        exit(1)
-    username = args[1]
-    password = args[2]
-    data = args[3]
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                           .format(username, password, data))
-    # create custom session object class from database engine
-    Session = sessionmaker(bind=engine)
-    # create instance of new custom session class
-    session = Session()
-    california = State(name="California")
-    california.cities = [City(name="San Francisco")]
-    session.add(california)
+def relationship_state():
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.
+                           format(argv[1],
+                                  argv[2],
+                                  argv[3]),
+                           pool_pre_ping=True)
+    Base.metadata.create_all(engine)
+    session = sessionmaker(bind=engine)()
+    c = City(name='San Francisco')
+    s = State(name='California', cities=[c])
+    session.add(s)
+    session.add(c)
     session.commit()
     session.close()
+
+
+if __name__ == "__main__":
+    relationship_state()
