@@ -6,7 +6,7 @@ query, create, edit, and delete tables in MySQL.
 
 ## Tests :heavy_check_mark:
 
-* [tests](./tests): Folder of SQL scripts for setting up test tables
+* [sql_test_files](./sql_test_files): Folder of SQL scripts for setting up test tables
 for all files. Provided by ALX.
 
 ## Tasks :page_with_curl:
